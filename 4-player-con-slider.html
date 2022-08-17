@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src=""></script>
+    <link rel="stylesheet" href="/static/tachyons.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/app.js"></script>
+  </head>
+  <body>
+
+    <div class="debug flex flex-column overflow-hidden vh-100">
+
+      <!-- fila 1 -->
+      <div class="flex flex-grow-1 pa2">
+        <div class="flex">
+          <video id="video" class="video" preload>
+            <source src="/static/video-1.mp4" type="video/mp4">
+          </video>
+
+          <video id="video" class="video" preload>
+            <source src="/static/video-1.mp4" type="video/mp4">
+          </video>
+        <div>
+      </div>
+
+      <!-- slider  -->
+      <div class="flex pa2">
+        <input id="slider" type="range" class="w-100" value=0 min=0 max=300>
+      </div>
+
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          var video = document.getElementById("video");
+          var slider = document.getElementById("slider");
+
+          slider.addEventListener("input", function() {
+            video.currentTime = (9 / 300) *  slider.value;
+            /*
+                donde la cuenta debe ser (segundos / max del input)
+
+                en este caso, el video tiene 9 segundos, y el
+                slider tiene un max de 300.
+
+            */
+          });
+
+          // para acceder a estas variables desde el inspector
+          // se pueden descomentar estas lineas:
+          window.video = video;
+
+        });
+      </script>
+
+    </div>
+
+  </body>
+</html>
+
