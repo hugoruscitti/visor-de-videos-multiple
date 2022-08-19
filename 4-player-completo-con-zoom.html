@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src=""></script>
+    <link rel="stylesheet" href="/static/tachyons.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/app.js"></script>
+  </head>
+  <body>
+
+    <div class="debug flex flex-column overflow-hidden vh-100">
+
+      <!-- fila 1 -->
+      <div class="flex flex-grow-1 pa2">
+        <div class="cb">
+          <video id="video" class="pointer fl w-50" preload>
+            <source src="/static/video-1.mp4" type="video/mp4">
+          </video>
+
+          <video id="video" class="pointer fl w-50" preload>
+            <source src="/static/video-2.mp4" type="video/mp4">
+          </video>
+        <div>
+
+        <div class="cb">
+          <video id="video" class="pointer fl w-50" preload>
+            <source src="/static/video-2.mp4" type="video/mp4">
+          </video>
+
+          <video id="video" class="pointer fl w-50" preload>
+            <source src="/static/video-1.mp4" type="video/mp4">
+          </video>
+        <div>
+
+      </div>
+
+      <!-- slider  -->
+      <div class="flex pa2">
+        <input id="slider" type="range" class="w-100" value=0 min=0 max=300>
+      </div>
+
+      <!-- botones  -->
+      <div class="flex pa2">
+        <button id="play">Reproducir</button>
+        <button class="dn" id="stop">Detener</button>
+      </div>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          var playing = false;
+
+          var videos = document.querySelectorAll("video");
+          var slider = document.getElementById("slider");
+          var play = document.getElementById("play");
+          var stop = document.getElementById("stop");
+          var mainVideo = document.querySelector("video");
+  
+
+          // hace que a los videos se les pueda hacer click para maximizar.
+          videos.forEach(function(video) {
+            video.addEventListener("click", function() {
+              video.classList.toggle("zoom");
+              video.classList.toggle("absolute--fill");
+            });
+          });
+
+          // permite hacer play y stop con space
+          window.addEventListener("keyup", function(event) {
+            if (event.keyCode == 32) {
+              if (playing) {
+                stop.click();
+              } else {
+                play.click()
+              }
+            }
+          });
+
+
+          // para que el slider esté sincronizado cuando los videos
+          // avanzan, se vincula el primer video con el slider, pero
+          // solo se actualiza cuando está reproduciendo los videos
+          mainVideo.addEventListener("timeupdate", function(event) {
+            slider.value = mainVideo.currentTime / (9 / 300);
+            /*
+               similar a la cuenta del slider, donde 9 es la cantidad
+               de segundos  del video y 300 es valor del atributo
+               max del slider.
+             */
+          });
+
+          mainVideo.addEventListener("ended", function(event) {
+            stop.click();
+          });
+
+
+          slider.addEventListener("input", function() {
+            if (playing) {
+              stop.click();
+            }
+
+            videos.forEach(function(video) {
+              video.currentTime = (9 / 300) *  slider.value;
+
+              /*
+                  donde la cuenta debe ser (segundos / max del input)
+
+                  en este caso, el video tiene 9 segundos, y el
+                  slider tiene un max de 300.
+
+              */
+            })
+          });
+
+          play.addEventListener("click", function() {
+            playing = true;
+            stop.classList.toggle("dn");
+            play.classList.toggle("dn");
+
+            videos.forEach(function(video) {
+              video.play();
+            });
+          });
+
+          stop.addEventListener("click", function() {
+            playing = false;
+            stop.classList.toggle("dn");
+            play.classList.toggle("dn");
+
+            videos.forEach(function(video) {
+              video.pause();
+            });
+          });
+
+          // para acceder a estas variables desde el inspector
+          // se pueden descomentar estas lineas:
+          // window.video = video;
+
+        });
+      </script>
+
+    </div>
+
+  </body>
+</html>
+
